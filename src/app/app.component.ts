@@ -1,10 +1,15 @@
-import { Component } from '@angular/core';
-
+import { Component, VERSION } from '@angular/core';
+//
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
+//
 export class AppComponent {
-  title = 'ConsultaLogApp';
-}
+  //
+  title             : string = '[LEARNINGPATH - CONSULTA LOG]';
+  appName           : string = "[LEARNINGPATH - CONSULTA LOG]";
+  appVersion        : string = '1.0.0.1';
+  runtimeVersion    : string = VERSION.full;
+ }   

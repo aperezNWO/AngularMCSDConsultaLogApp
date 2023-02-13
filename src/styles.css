@@ -1,1 +1,56 @@
-/* You can add global styles to this file, and also import other style files */
+
+html, body 
+{ 
+   height: 100%; 
+}
+
+body { 
+   margin: 0; 
+   font-family: Roboto, "Helvetica Neue", sans-serif; 
+   font-size: x-small;
+   background-color: darkolivegreen;
+}
+
+table {
+   background-color: darkgreen;
+   width: min-content;
+   margin: 2em;
+}
+ 
+.scrollbar 
+{
+   height:300px;
+   overflow-y:auto;
+   background-color: cadetblue;
+   font-size:x-small;
+   color:aquamarine;
+}
+
+.mdc-list-item__content
+{
+   color:bisque;   
+}
+
+.title
+{
+   text-align: center;
+   padding   : 1px;
+   background-color:darkslategrey;
+   color:aquamarine;
+}
+
+.subtitle
+{
+   text-align: center;
+   padding   : 1px;
+   background-color:darkslategrey;
+   color:aquamarine;
+}
+
+.footer
+{
+   text-align: center;
+   padding   : 1px;
+   background-color:darkslategrey;
+   color:aquamarine;
+}
