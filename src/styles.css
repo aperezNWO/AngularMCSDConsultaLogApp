@@ -1,5 +1,5 @@
-
-html, body 
+html, 
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }l, body 
 { 
    height: 100%; 
 }
@@ -13,22 +13,23 @@ body {
 
 table {
    background-color: darkgreen;
-   width: min-content;
-   margin: 2em;
-}
- 
-.scrollbar 
-{
-   height:300px;
-   overflow-y:auto;
-   background-color: cadetblue;
-   font-size:x-small;
-   color:aquamarine;
+   /*width: min-content;*/
+   /*margin: 2em;*/
+   /*margin: 2rem;*/
 }
 
-.mdc-list-item__content
+th { 
+   font-weight: bold;
+   /*font-size: 120%;*/
+}
+
+.scrollbar 
 {
-   color:bisque;   
+   height:auto;
+   overflow-y:auto;
+   background-color: cadetblue;
+   font-size:xx-small;
+   color:aquamarine;
 }
 
 .title
@@ -42,9 +43,10 @@ table {
 .subtitle
 {
    text-align: center;
-   padding   : 1px;
+   padding   : .5em;
    background-color:darkslategrey;
    color:aquamarine;
+   vertical-align:middle;
 }
 
 .footer
@@ -54,3 +56,5 @@ table {
    background-color:darkslategrey;
    color:aquamarine;
 }
+
+

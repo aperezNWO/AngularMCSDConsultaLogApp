@@ -1,0 +1,10 @@
+================================================
+-- [LEARNINGPATH - CONSULTA LOG] - STRATEGY
+================================================
+--[_] JSON METHOD.
+      -- [_] LEARNINGPATH APP : http://angulardemo.somee.com/demos/generarinformejson
+      -- [_] ESTRUCTURA:
+                  [{"id_Column":100331
+                    ,"pageName":"PAGE_INDEX"
+                    ,"accessDate":"2023-02-13T18:13:19.9"
+                    ,"ipValue":"199.16.157.183"}]

@@ -10,6 +10,6 @@ export class AppComponent {
   //
   title             : string = '[LEARNINGPATH - CONSULTA LOG]';
   appName           : string = "[LEARNINGPATH - CONSULTA LOG]";
-  appVersion        : string = '1.0.0.1';
+  appVersion        : string = '1.0.0.2';
   runtimeVersion    : string = VERSION.full;
  }   
