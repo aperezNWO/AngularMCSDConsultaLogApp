@@ -49,7 +49,6 @@ label+input {
   margin: 0 30% 0 4%;
 }
 
-
 label+select {
   width: 32%;
   /* Large margin-right to force the next element to the new-line
@@ -57,10 +56,8 @@ label+select {
   margin: 0 32% 0 4%;
 }
 
-
 /* Only the submit button is matched by this selector,
        but to be sure you could use an id or class for that button */
-
 input+input {
   float: right;
 }

@@ -1,13 +1,14 @@
-import { NgModule                 } from '@angular/core';
-import { RouterModule             } from '@angular/router';
-import { MatListModule            } from '@angular/material/list';
-import { MatTableModule           } from '@angular/material/table';
-import { MatPaginatorModule       } from '@angular/material/paginator';
-import { BrowserModule            } from '@angular/platform-browser';
-import { BrowserAnimationsModule  } from '@angular/platform-browser/animations';
-import { HttpClientModule         } from '@angular/common/http';
-import { AppComponent             } from './app.component';
-import { ConsultaLogViewComponent } from './consulta-log-view/consulta-log-view.component';
+import { NgModule                                  } from '@angular/core';
+import { FormsModule,ReactiveFormsModule           } from '@angular/forms';
+import { RouterModule                              } from '@angular/router';
+import { MatListModule                             } from '@angular/material/list';
+import { MatTableModule                            } from '@angular/material/table';
+import { MatPaginatorModule                        } from '@angular/material/paginator';
+import { BrowserModule                             } from '@angular/platform-browser';
+import { BrowserAnimationsModule                   } from '@angular/platform-browser/animations';
+import { HttpClientModule                          } from '@angular/common/http';
+import { AppComponent                              } from './app.component';
+import { ConsultaLogViewComponent                  } from './consulta-log-view/consulta-log-view.component';
 
 @NgModule({
   declarations: [
@@ -15,8 +16,10 @@ import { ConsultaLogViewComponent } from './consulta-log-view/consulta-log-view.
     ConsultaLogViewComponent,
   ],
   imports: [
+    FormsModule,
     BrowserModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     RouterModule,
     HttpClientModule,
     MatListModule,

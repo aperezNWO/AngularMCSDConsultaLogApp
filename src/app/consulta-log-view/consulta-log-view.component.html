@@ -1,4 +1,54 @@
 <div class="mat-elevation-z8">
+<hr>  
+<div class="searchPanel">
+  <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+    <!--P_DATA_SOURCE_ID      -->
+    <div>
+      <label for="_P_DATA_SOURCE_ID">Origen de Datos :</label>
+      <!--<select   id="_P_DATA_SOURCE_ID"
+                required
+                name="_P_DATA_SOURCE_ID" formControlName="_P_DATA_SOURCE_ID">                    
+      <option *ngFor="let _pDataSource of P_DATA_SOURCES" [value]="_pDataSource.M_DATA_SOURCE_ID">{{_pDataSource.M_DATA_SOURCE_NAME}}</option>
+      </select>-->
+    </div>
+    <!-- [_] P_ID_TIPO_LOG    -->
+    <div>
+      <label for="_P_ID_TIPO_LOG">Tipo de Consulta : </label>
+      <!--<select id="_P_ID_TIPO_LOG"
+              required
+              name="_P_ID_TIPO_LOG" formControlName="_P_ID_TIPO_LOG">                    
+           <option *ngFor="let _pTipoLog of P_ID_TIPO_LOGS" [value]="_pTipoLog.M_TIPO_LOG_ID">{{_pTipoLog.M_TIPO_LOG_NAME}}</option>
+      </select>-->
+    </div>
+    <!--P_ROW_NUM-->
+    <div>
+      <label for="_P_ROW_NUM">
+        # de Registros :
+      </label>
+      <input id="_P_ROW_NUM" type="text" formControlName="_P_ROW_NUM">
+    </div>
+    <!--P_FECHA_INICIO-->
+    <div>
+      <label for="_P_FECHA_INICIO">
+        Fecha Inicial :
+      </label>
+      <input id="_P_FECHA_INICIO" type="date" formControlName="_P_FECHA_INICIO">
+    </div>
+    <!--P_FECHA_FIN-->
+    <div>
+      <label for="_P_FECHA_FIN">
+        Fecha Final :
+      </label>
+      <input id="_P_FECHA_FIN" type="date" formControlName="_P_FECHA_FIN">
+    </div>
+    <hr>
+    <div align="right">
+      <button class="button" type="submit">Buscar</button>
+      <button class="button" type="button" (click)="newSearch()">Nueva</button>
+    </div>
+  </form>
+</div>
+<hr>  
 <div class="scrollbar">
 <table  mat-table  [dataSource]="dataSource"  class="mat-elevation-z8" aria-label="informelogremoto">
   <ng-container matColumnDef="id_Column">
@@ -22,10 +72,11 @@
 </table>
 </div>
 <hr>
-<mat-paginator [length]="100"
-              [pageSize]="4"
-              [pageSizeOptions]="[4, 10, 25, 100]"
-              aria-label="informelogremoto">
-</mat-paginator>
+<mat-paginator #paginator="matPaginator"
+    class="demo-paginator" 
+    [length]=""
+    [pageSize]="3"
+    [pageSizeOptions]="[3, 10, 25, 100]"
+    aria-label="informelogremoto"></mat-paginator>
 </div>
 
