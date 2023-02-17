@@ -9,11 +9,13 @@ import { BrowserAnimationsModule                   } from '@angular/platform-bro
 import { HttpClientModule                          } from '@angular/common/http';
 import { AppComponent                              } from './app.component';
 import { ConsultaLogViewComponent                  } from './consulta-log-view/consulta-log-view.component';
+import { ConsultaDineroViewComponent } from './consulta-dinero-view/consulta-dinero-view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ConsultaLogViewComponent,
+    ConsultaDineroViewComponent,
   ],
   imports: [
     FormsModule,
