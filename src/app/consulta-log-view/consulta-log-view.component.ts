@@ -26,8 +26,8 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
   model                              = new SearchCriteria( "0"
                                           ,"0"
                                           ,"999"
-                                          ,"2022-09-01"
-                                          ,"2022-09-30"
+                                          ,"2023-01-01"
+                                          ,"2023-12-31"
                                           ,""
                                           ,"");
   //
@@ -37,8 +37,8 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
     //_P_ID_TIPO_LOG      : ["0"           , Validators.required], 
     //_P_DATA_SOURCE_ID   : ["0"           , Validators.required],
     _P_ROW_NUM          : ["999"         , Validators.required],
-    _P_FECHA_INICIO     : ["2022-09-01"  , Validators.required],
-    _P_FECHA_FIN        : ["2022-09-30"  , Validators.required],
+    _P_FECHA_INICIO     : ["2023-01-01"  , Validators.required],
+    _P_FECHA_FIN        : ["2022-12-31"  , Validators.required],
   });
   //
   constructor(private logInfoService: LogInfoService, private formBuilder: FormBuilder) {
@@ -66,8 +66,8 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
         //_P_ID_TIPO_LOG      : ["0"           , Validators.required], 
         //_P_DATA_SOURCE_ID   : ["0"           , Validators.required],
         _P_ROW_NUM          : ["999"         , Validators.required],
-        _P_FECHA_INICIO     : ["2022-09-01"  , Validators.required],
-        _P_FECHA_FIN        : ["2022-09-30"  , Validators.required],
+        _P_FECHA_INICIO     : ["2023-01-01"  , Validators.required],
+        _P_FECHA_FIN        : ["2023-12-31"  , Validators.required],
       });
       //
       console.log("(DEFAULT VALUES - INIT)");
