@@ -122,4 +122,83 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
     //
     this.informeLogRemoto.subscribe(myObserver);
   }
+  //
+  GetConsultaLogExcelPostValidate():void{
+    //
+    console.log("GENERAR EXCEL - VALIDAR");
+    //
+    //var form = $("#searchForm");
+    //form.validate();
+    //
+    //console.log("Valid: " + form.valid());
+    //
+    //if (form.valid() == true) {
+        this.GetConsultaLogExcelPost();
+    //}
+  };
+  //
+  GetConsultaLogExcelPost():void
+  {
+    //
+    console.log("GENERAR EXCEL - POST");
+    /*
+    //
+    var P_ID_DATA_SOURCE      = $('#P_ID_DATA_SOURCE').val();
+    var P_FECHA_INICIO        = GetFormattedDate($('#StartDate').val(), 0);
+    var P_FECHA_FIN           = GetFormattedDate($('#EndDate').val(), 0);
+    var P_ID_TIPO_LOG         = $('#P_ID_TIPO_LOG').val();
+    var P_ID_LOG              = 0;
+    var P_ROW_NUM             = $("#txtRecordCount").val();
+    var P_ID_TIPO_LOG_TEXT    = $("#P_ID_TIPO_LOG option:selected").text().trim().split('-')[0];
+    var P_ID_DATA_SOURCE_TEXT = $('#P_ID_DATA_SOURCE option:selected').text().trim();
+    var P_FILE_NAME           = "[" + P_ID_DATA_SOURCE_TEXT + "]" + "[" + P_ID_TIPO_LOG_TEXT + "]";
+    var P_SHEET_NAME          = "{" + P_ID_TIPO_LOG_TEXT + "}";
+    var P_EXCEL_HEADERS       = GetExcelHeaders();
+    //
+    var url_post              = "GetConsultaLogExcelPost";
+    //
+    //_ShowProgressBarTimer();
+    //
+    //GetDate();
+    //
+    $.ajax(
+        {
+            data:
+            {
+                P_ID_DATA_SOURCE  : P_ID_DATA_SOURCE
+                , P_ID_TIPO_LOG   : P_ID_TIPO_LOG
+                , P_ID_LOG        : P_ID_LOG
+                , P_FECHA_INICIO  : P_FECHA_INICIO
+                , P_FECHA_FIN     : P_FECHA_FIN
+                , P_ROW_NUM       : P_ROW_NUM
+                , P_FILE_NAME     : P_FILE_NAME
+                , P_EXCEL_HEADERS : P_EXCEL_HEADERS
+                , P_SHEET_NAME    : P_SHEET_NAME
+            }
+            , method       : 'POST'
+            , dataType     : 'TEXT'
+            , url          : url_post
+            , success      : function (p_nombrearchivo) {
+                //
+                console.log("[SI-SPAE-WEB] LOG DE ENVÍO DE EMAILS : GENERAR ARCHIVO EXCEL : " + p_nombrearchivo);
+                //
+                var url_get = "GetConsultaLogExcelFile?p_nombreArchivo=" + p_nombrearchivo;
+                window.open(url_get, '_blank');
+                //
+                _HideProgressBarTimer();
+            }
+            , error: function (xhr, textStatus, errorThrown) {
+                //
+                alert("Se presentó un fallo.<br/>Favor comunicarse con el administrador del sistema");
+                //
+                if (xhr != null) {
+                    console.log(xhr.responseText);
+                }
+                //
+                _HideProgressBarTimer();
+            }
+        });
+      });
+      */
+  }
 }

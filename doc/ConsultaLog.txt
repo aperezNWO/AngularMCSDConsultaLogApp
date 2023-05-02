@@ -1,0 +1,1060 @@
+<!-------------------------------------------------------------------------------------------  -->
+<!-- 1. INICIO ENCABEZADO RAZOR -->
+<!-------------------------------------------------------------------------------------------  -->
+@model IEnumerable<SPAE_VIVANTO.Models.ConsultasSolicitudes.ConsultaSolicitudesEntity>
+@{
+    Layout        = "~/Views/Shared/_LayoutMenu.cshtml";
+    ViewBag.Title = @"[SI-SPAE-WEB] - CONSULTA DE LOG";
+}
+<!-------------------------------------------------------------------------------------------  -->
+<!-- 1. FIN ENCABEZADO RAZOR  -->
+<!-------------------------------------------------------------------------------------------  -->
+<!-- INICIO CDN -->
+<script type="text/javascript"
+        src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript"
+        src="https://cdn.datatables.net/v/ju/dt-1.12.1/r-2.3.0/datatables.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/localization/messages_es.min.js"></script>
+<script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+<link type="text/css"
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" />
+<link type="text/css"
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.13.1/themes/smoothness/jquery-ui.css" />
+<link type="text/css"
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
+<link type="text/css"
+      rel="stylesheet"
+      href="https://cdn.datatables.net/v/ju/dt-1.12.1/r-2.3.0/datatables.min.css" />
+<!-- FIN  CDN -->
+<!-- INICIO HOJAS DE ESTILO -->
+<link rel="stylesheet"
+      href="~/Content/Estilos/LogForm.css"
+      type="text/css" />
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    /* The Modal (background) */
+    .modal {
+        display             : none; /* Hidden by default */
+        position            : fixed; /* Stay in place */
+        z-index             : 1; /* Sit on top */
+        padding-top         : 100px; /* Location of the box */
+        left                : 0;
+        top                 : 0;
+        width               : 100%; /* Full width */
+        height              : 100%; /* Full height */
+        overflow            : auto; /* Enable scroll if needed */
+        background-color    : rgb(0, 0, 0); /* Fallback color */
+        background-color    : rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+        color               : #fff;
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color  : #fefefe;
+        margin            : auto;
+        margin-top        : 200px;
+        padding           : 20px;
+        border            : 1px solid #888;
+        width             : 50%;
+        height            : 300px;
+        color             : darkred;
+    }
+
+    /* The Close Button */
+    .close {
+        color       : #aaaaaa;
+        float       : right;
+        font-size   : 28px;
+        font-weight : bold;
+        color       : darkred;
+    }
+
+        .close:hover,
+        .close:focus {
+            color           : #000;
+            text-decoration : none;
+            cursor          : pointer;
+        }
+
+    .ui-tooltip {
+        width        : auto;
+        text-align   : left;
+    }
+
+    .ErrorDetail {
+        text-decoration: none;
+    }
+
+    .modalTimer {
+        display            : none; /* Hidden by default */
+        position           : fixed; /* FIXED - Stay in place */
+        z-index            : 99; /* Sit on top */
+        left               : 0;
+        top                : 0;
+        width              : 100%; /* Full width */
+        height             : 100%; /* Full height */
+        overflow           : auto; /* Enable scroll if needed */
+        background-color   : rgb(0, 0, 0); /* Fallback color */
+        background-color   : rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    }
+
+    .modal-content-Timer {
+        background-color  : #fefefe;
+        margin            : 15% auto; /* 15% from the top and centered */
+        padding           : 1em;
+        border            : 1px solid #888;
+        width             : 15%; /* Could be more or less, depending on screen size */
+        color            : black;
+    }
+</style>
+<!-- FIN HOJAS DE ESTILO    -->
+<!-- INICIO HTML            -->
+<div class="centrarDiv" id="divMaestroLog">
+    <table class="marcoFormulario efecto2 efecto1" style="width: 1210px">
+        <tr>
+            <td>
+                <h5>[SI-SPAE-WEB] - CONSULTA DE LOG</h5>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <!-- INICIO TABULACION                     -->
+                <div id="tabContent">
+                    <!-- TAB EMCABEZADOS  - INICIO         -->
+                    <ul>
+                        <li><a href="#tabs-1">Búsqueda</a></li>
+                        <li><a href="#tabs-2">Estadísticas</a></li>
+                    </ul>
+                    <!-- TAB ENCABEZADOS - FIN             -->
+                    <!-- TAB 1 : BUSQUEDA  / INICIO        -->
+                    <div id="tabs-1">
+                        <!-- PANEL DE BUSQUEDA / INICIO    -->
+                        <table border="0" cellspacing="5" cellpadding="5" style="width: 100%">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <form id="searchForm">
+                                            <b>Fecha</b>
+                                            <span style="background-color: #cccccc; padding: 10px;">
+                                                Desde (dd/mm/yyyy | 6 meses atras + 2 dias por defecto):
+                                                <input type="date" id="StartDate" name="StartDate" style="width:150px" />
+                                                Hasta (dd/mm/yyyy | fecha actual  + 2 dias por defecto):
+                                                <input type="date" id="EndDate"   name="EndDate" style="width:150px" />
+                                            </span>
+                                            <br />
+                                            <b>Origen de Datos</b>
+                                            <select id="P_ID_DATA_SOURCE" name="P_ID_DATA_SOURCE" required="required">
+                                                <option value="0"> Seleccione Opción... </option>
+                                                <option value="1" selected>RUV_PRODUCCION</option>
+                                                <option value="2">RUV_PRUEBAS</option>
+                                            </select>
+                                            &nbsp; # de Registros (Max 9999)
+                                            <input type="text" id="txtRecordCount" name="txtRecordCount" value="9999" style="width:100px" maxlength="4" required="required" />
+                                            <br />
+                                            <span id="divTipoConsulta">
+                                                <b>Tipo de Consulta</b>
+                                                <select id="P_ID_TIPO_LOG" name="P_ID_TIPO_LOG" required="required" style="width: auto;">
+                                                    <option>...CARGANDO...</option>
+                                                </select>
+                                                <br />
+                                                <input type="button" id="btnBuscar" name="btnBuscar" value="BUSCAR" style="width: 200px" />
+                                            </span>
+                                            <br />
+                                            <div id="errorList" name="errorList"></div>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- PANEL DE BUSQUEDA   : FIN    -->
+                        <!-- PANEL DE RESULTADOS : INICIO -->
+                        <table id="emaiLogTable" class="cell-border compact stripe order-column display" border="0" cellspacing="5" cellpadding="5" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <span id="HEADER_ID_LOG"></span>
+                                    </th>
+                                    <th>
+                                        <span id="HEADER_DATE_TIME"></span>
+                                    </th>
+                                    <th>
+                                        <span id="HEADER_TEXT_1_WEB"></span>
+                                    </th>
+                                    <th>
+                                        <span id="HEADER_TEXT_2_WEB"></span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="4">
+                                        <div id="divdescargaexcel" style="display: block" align="right">
+                                            <a href="javascript:GetConsultaLogExcelPostValidate();">
+                                                <img title="Generar Excel" src="../Content/Icons/Table.ico" width="28" height="28" />
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <!-- PANEL DE RESULTADOS : FIN    -->
+                    </div>
+                    <!-- TAB 1 : BUSQUEDA / FIN            -->
+                    <!-- TAB 2 : ESTADÍSTICAS / INICIO     -->
+                    <div id="tabs-2">
+                        <!-- PANEL BUSQUEDA / INICIO -->
+                        <table border="0" cellspacing="5" cellpadding="5" style="width: 100%">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <form id="searchForm_STAT">
+                                            <b>Origen de Datos</b>
+                                            <select id="P_ID_DATA_SOURCE_STAT" name="P_ID_DATA_SOURCE_STAT" required="required">
+                                                <option value="0" selected> Seleccione Opción... </option>
+                                                <option value="1">RUV_PRODUCCION</option>
+                                                <option value="2">RUV_PRUEBAS</option>
+                                            </select>
+                                            &nbsp;
+                                            <b># de Registros (Max 10)</b>
+                                            <input type="text" id="txtRecordCount_STAT" name="txtRecordCount_STAT" value="10" style="width:100px" maxlength="2" required="required" />
+                                            &nbsp;
+                                            <span id="divYEAR_STAT">
+                                                <b>Año</b>
+                                                <select id="P_YEAR_STAT" name="P_YEAR_STAT" required="required" style="width: auto;">
+                                                    <option value="0" selected>...cargando...</option>
+                                                </select>
+                                                <br />
+                                                <input type="button" id="btnBuscar_STAT" name="btnBuscar_STAT" value="BUSCAR" style="width: 200px" />
+                                            </span>
+                                            <br />
+                                            <div id="errorList_STAT" name="errorList_STAT"></div>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- PANEL BUSQUEDA / FIN    -->
+                        <!-- PANEL GRAFICO / INICIO -->
+                        <div id="divPieChart" style="display: block; box-sizing: border-box; height: 400px; width: 800px;padding:5px;" height="400" width="800">
+                            <canvas id="pieChart">
+                            </canvas>
+                        </div>
+                        <!-- PANEL GRAFICO / FIN     -->
+                        <!-- PANEL DESCARGA / INICIO -->
+                        <div id="divdescargapdf" style="display: block" align="right">
+                            <a href="javascript:GetPdf();">
+                                <img title="Generar PDF" src="../Content/Icons/Save.png" width="28" height="28" />
+                            </a>
+                        </div>
+                        <!-- PANEL DESCARGA / FIN -->
+                    </div>
+                    <!-- TAB 2 : ESTADÍSTICAS / FIN        -->
+                </div>
+                <!-- FIN TABULACION                        -->
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="dialog-message" title="DETALLE DE REGISTRO #" style="display: none; background-color: darkgrey; color: darkgreen">
+    <span id="logDetail"></span>
+</div>
+<!-- VENTANAS MODAL STATUS -->
+<div id="_statusWindowTimer" class="modalTimer" style="display: none">
+    <div class="modal-content-Timer">
+        <h2>
+            ... Procesando ...
+            <br />
+            <br />
+            <timer></timer>
+        </h2>
+    </div>
+</div>
+<!-- FIN HTML              -->
+<!-- INICIO SCRIPTS        -->
+<script type="text/javascript">
+    //
+    let table;
+    let pieChart;
+    //
+    function SetYearList_STAT()
+    {
+        //
+        var p_Date     = new Date();
+        var year_max   = p_Date.getFullYear();
+        var year_min   = 2020;
+        var yearList   = [2020,2021,2022];
+        //
+        var selectOptions = '<option value="0">Seleccione Opción...</option>';
+        //
+        $("#P_YEAR_STAT").empty().append(selectOptions);
+        //
+        $.each(yearList, function (index, value) {
+            //
+            $("#P_YEAR_STAT").append($('<option/>', {
+                  value    : value
+                , text     : value
+                , selected : (value == 0) ? true : false
+            }));
+        });
+    };
+    //
+    function GetPdf()
+    {   //
+        html2canvas($("#pieChart")[0]).then((canvas) => {
+            //
+            var imgData              = canvas.toDataURL('image/png');
+            //
+            var p_orientation        = 'p';  // POTRAIT
+            var p_measurement_unit   = 'mm'; // MILIMETERS
+            var doc                  = new jsPDF(p_orientation, p_measurement_unit );
+            //
+            doc.addImage(imgData, 'PNG', 1, 5);
+            //
+            doc.save('sample-file.pdf');
+        });
+    }
+    //
+    function SetChart() {
+        //
+        console.log("[SI-SPAE-WEB] - GET STAT ");
+        //
+        var P_ID_DATA_SOURCE = $("#P_ID_DATA_SOURCE_STAT").val();
+        var P_ROW_NUM        = $("#txtRecordCount_STAT").val();
+        var P_YEAR           = $("#P_YEAR_STAT").val();
+        var url_post         = "GetConsultaLogStatPost";
+        //
+        _ShowProgressBarTimer();
+        //
+        $.ajax({
+            url          : url_post
+            , method     : "POST"
+            , dataType   : "JSON"
+            , async      : true
+            , data       :
+            {
+                P_ID_DATA_SOURCE  : P_ID_DATA_SOURCE
+                , P_ROW_NUM       : P_ROW_NUM
+                , P_YEAR          : P_YEAR
+
+            }
+            , success: function (jsondata) {
+                //
+                _HideProgressBarTimer();
+                //
+                const statLabels          = [];
+                const statData            = [];
+                const statBackgroundColor = [];
+                //
+                $.each(jsondata, function (index, value) {
+                    //
+                    console.log("[SI-SPAE-WEB] - GET STAT - RESULT : index [" + index + "] value={"
+                        + jsondata[index]["TEXT_1"]
+                        + "-" + jsondata[index]["TEXT_2"]
+                        + "-" + jsondata[index]["TEXT_3"] + "}");
+                    //
+                    statLabels.push(jsondata[index]["TEXT_1"] + " - " + jsondata[index]["TEXT_2"]);
+                    statData.push(Number(jsondata[index]["TEXT_2"]));
+                    statBackgroundColor.push('rgb('
+                        + (Number(jsondata[index]["TEXT_2"]) / 4) + ','
+                        + (Number(jsondata[index]["TEXT_2"]) / 3) + ','
+                        + (Number(jsondata[index]["TEXT_2"]) / 2) + ')');
+
+                });
+                //
+                const ctx = document.getElementById('pieChart').getContext('2d');
+                //
+                const data = {
+                    labels              : statLabels,
+                    datasets: [{
+                        label: 'CONTEO DE SESIONES - AÑO ['
+                            + $('#P_YEAR_STAT option:selected').text().trim()
+                            + '] - ['
+                            + $('#P_ID_DATA_SOURCE_STAT option:selected').text().trim() + ']',
+                        data            : statData,
+                        backgroundColor : statBackgroundColor,
+                        hoverOffset     : 4
+                    }]
+                };
+                //
+                if (pieChart) {
+                    pieChart.destroy();
+                }
+                pieChart = new Chart(ctx, {
+                    type   : 'bar',
+                    data   : data
+                });
+            }
+            , error: function (xhr, textStatus, errorThrown) {
+                //
+                alert("Se presentó un fallo.<br/>Favor comunicarse con el administrador del sistema");
+                //
+                if (xhr != null) {
+                    //
+                    console.log(' [SI-SPAE-WEB] - GET STAT - RETURN : ' + xhr.responseText);
+                }
+                //
+                _HideProgressBarTimer();
+            }
+        });
+    };
+    //
+    function FormatDatePart(datePart) {
+        //
+        if (parseInt(datePart) < 10) {
+            datePart = "0" + datePart;
+        }
+        //
+        return datePart;
+    }
+    //
+    function GetDate() {
+        //
+        var today = new Date();
+        //
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        //
+        h = FormatDatePart(h);
+        m = FormatDatePart(m);
+        s = FormatDatePart(s);
+        //
+        var timeStamp = ("[" + h + " HH : " + m + " MM : " + s + " SS]");
+        //
+        $("timer").text(timeStamp);
+        //
+        console.log(timeStamp);
+        console.log($('#_statusWindowTimer').attr('style'));
+        //
+        if ($('#_statusWindowTimer').attr('style') == 'display: block;') {
+            setTimeout(function () { GetDate() }, 500);
+        };
+        //
+    };
+    //
+    function DrawTable(jsondata) {
+        //
+        if (table != null) {
+            //
+            table.destroy();
+        }
+        //
+        //
+        let excelHeaders   = null;
+        var P_ID_TIPO_LOG  = $('#P_ID_TIPO_LOG').val();
+        //
+        switch (P_ID_TIPO_LOG) {
+            case "1":  // EMAILS ENVIADOS
+                excelHeaders = JSON.parse("{\"ID_LOG\":\"Registro Nro.\",\"DATE_TIME\":\"Fecha/Hora\",\"TEXT_1\":\"Destinatario\",\"TEXT_2\":\"Asunto\"}");
+                break;
+            case "2":  // EMAILS NO ENVIADOS
+                excelHeaders = JSON.parse("{\"ID_LOG\":\"Registro Nro.\",\"DATE_TIME\":\"Fecha/Hora\",\"TEXT_1\":\"Usuario/Destinatario\",\"TEXT_2\":\"Descripción Error\"}");
+                break;
+            case "3":  // GENERAL DE ERRORES
+                excelHeaders = JSON.parse("{\"ID_LOG\":\"Registro Nro.\",\"DATE_TIME\":\"Fecha/Hora\",\"TEXT_1\":\"Usuario/Ubicación\",\"TEXT_2\":\"Descripción Error\"}");
+                break;
+        }
+        //
+        table = $('#emaiLogTable').DataTable({
+            "data": jsondata
+            , "dataSrc": ""
+            , "columnDefs": [
+                {
+                    "targets": [0, 1, 2, 3]
+                    , "className": "dt-left"
+                }
+            ]
+            , "columns": [
+                {
+                    "data"     : "ID_LOG"
+                    , "title"  : excelHeaders["ID_LOG"]
+                    , "render" : function (data, type, row, meta) {
+                        return '<a href="javascript:ShowDialog(' + data + ')">' + data + '</a>';
+                    }
+                }
+                , { "data": "DATE_TIME", "title": excelHeaders["DATE_TIME"] }
+                , {
+                    "data": "TEXT_1_WEB"
+                    , "title": excelHeaders["TEXT_1"]
+                    , "render": function (data, type, row, meta) {
+                        if (row["TEXT_3"].trim() != '')
+                            return '<span id="' + row["ID_LOG"] + '" title="' + row["TEXT_3"] + '">' + data + '</span>';
+                        else
+                            return data;
+                    }
+                }
+                , { "data": "TEXT_2_WEB", "title": excelHeaders["TEXT_2"] }
+            ]
+            , "order": [[0, "desc"]]
+            , "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json"
+            }
+        });
+        //
+        table.rows().every(function (rowIndex) {
+            //
+        });
+        //
+        table.columns().every(function (colsIndex) {
+            //
+        });
+        //
+        table.draw();
+    }
+    //
+    function GetFormattedDate(p_date, order) {
+        //
+        var today = '';
+        switch (order) {
+            case 0:  // FECHA COMPLATIBLE CON ORACLE
+                var p_dates = p_date.split('-'); // P_DATE   = 2022-04-09
+                var day     = p_dates[2];
+                var month   = p_dates[1];
+                var year    = p_dates[0];
+                today       = day + "/" + month + "/" + year;
+                break;
+            case 1:  // FECHA COMPATIBLE  CON UIX
+                //
+                var day    = p_date.getDate();
+                var month  = p_date.getMonth() + 1;
+                var year   = p_date.getFullYear();
+                //
+                if (month < 10) month = "0"   + month;
+                if (day < 10) day     = "0"   + day;
+                //
+                today                 = year  + "-" + month + "-" + day;
+                //
+                break;
+        }
+        //
+        return today;
+    }
+    //
+    function GetDateRange() {
+        //
+        console.log("[SI-SPAE-WEB] - GET DATE RANGE");
+        //
+        var P_ID_DATA_SOURCE = $('#P_ID_DATA_SOURCE').val();
+        var url_post         = "GetDateRangePost";
+        //
+        var currentDate      = new Date();   // CURRENT DATE BY DEFAULT
+        var finalDate        = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 2);   // CURRENT DATE BY DEFAULT + 2 DAYS
+        var month_offset     = 6;
+        //
+        var initialDate      = new Date(finalDate.getFullYear(), Math.abs(finalDate.getMonth() - month_offset), finalDate.getDate());
+        //
+        document.getElementById("StartDate").value = GetFormattedDate(initialDate, 1);
+        document.getElementById("EndDate").value   = GetFormattedDate(finalDate, 1);
+        //
+        _ShowProgressBarTimer();
+        //
+        GetDate();
+        //
+        $.ajax({
+            url        : url_post
+            , method   : "POST"
+            , dataType : "JSON"
+            , async    : true
+            , data     :
+            {
+                P_ID_DATA_SOURCE: P_ID_DATA_SOURCE
+            }
+            , success: function (jsondata) {
+                //
+                console.log("[SI-SPAE-WEB] - GET DATE RANGE ");
+                //
+                var selectOptions = '<option value="0">Seleccione Opción...</option>';
+                //
+                $("#P_ID_TIPO_LOG").empty().append(selectOptions);
+                //
+                $.each(jsondata, function (index, value) {
+                    //
+                    console.log("[SI-SPAE-WEB] - GET DATE RANGE - RESULT : index [" + index + "] value=[" + JSON.stringify(value) + "]");
+                    //
+                    $("#P_ID_TIPO_LOG").append($('<option/>', {
+                        value: (index + 1)
+                        , text: jsondata[index]["TEXT_1"] + "-" + jsondata[index]["TEXT_2"]
+                        , selected: (index == 0) ? true : false
+                    }));
+                });
+                //
+                var jsondataTable = JSON.parse("[]");
+                //
+                DrawTable(jsondataTable);
+                //
+                _HideProgressBarTimer();
+            }
+            , error: function (xhr, textStatus, errorThrown) {
+                //
+                alert("Se presentó un fallo.<br/>Favor comunicarse con el administrador del sistema");
+                //
+                if (xhr != null) {
+                    //
+                    console.log(' [SI-SPAE-WEB] - REFRESHING DATA - return : ' + xhr.responseText);
+                }
+                //
+                _HideProgressBarTimer();
+            }
+        });
+    }
+    //
+    function ShowDialog(idLog) {
+        //
+        console.log("SHOW DIALOG  " + idLog);
+        //
+        var P_ID_DATA_SOURCE = $('#P_ID_DATA_SOURCE').val();
+        var P_FECHA_INICIO   = GetFormattedDate($('#StartDate').val(), 0);
+        var P_FECHA_FIN      = GetFormattedDate($('#EndDate').val(), 0);
+        var P_ID_TIPO_LOG    = $('#P_ID_TIPO_LOG').val();
+        var P_ID_LOG         = idLog;
+        var P_ROW_NUM        = 3;
+        //
+        var url_post         = "GetConsultaLogPost";
+        //
+        _ShowProgressBar();
+        //
+        $.ajax({
+            url        : url_post
+            , method   : "POST"
+            , dataType : "JSON"
+            , data:
+            {
+                P_ID_DATA_SOURCE : P_ID_DATA_SOURCE
+                , P_ID_TIPO_LOG  : P_ID_TIPO_LOG
+                , P_ID_LOG       : P_ID_LOG
+                , P_FECHA_INICIO : P_FECHA_INICIO
+                , P_FECHA_FIN    : P_FECHA_FIN
+                , P_ROW_NUM      : P_ROW_NUM
+            }
+            , success: function (jsondata) {
+                //
+                console.log("[SI-SPAE-WEB] - GETTING DATA - RESULT : " + JSON.stringify(jsondata));
+                //
+                $("#logDetail").html(jsondata[0]["TEXT_1"]);
+                //
+                $(function () {
+                    $("#dialog-message").dialog({
+                        modal      : true
+                        , width    : 800
+                        , height   : 200
+                        , title    : "DETALLE DE REGISTRO #[" + idLog + "]"
+                        , buttons  : {
+                            Ok: function () {
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
+                });
+                //
+                _HideProgressBar();
+            }
+            , error: function (xhr, textStatus, errorThrown) {
+                //
+                alert("Se presentó un fallo.<br/>Favor comunicarse con el administrador del sistema");
+                //
+                if (xhr != null) {
+                    //
+                    console.log(' [SI-SPAE-WEB] - REFRESHING DATA - return : ' + xhr.responseText);
+                }
+                //
+                _HideProgressBar();
+            }
+        });
+    }
+    //
+    function GetConsultaLog() {
+        //
+        console.log("[SI-SPAE-WEB] - GETTING DATA ");
+        //
+        var P_ID_DATA_SOURCE = $('#P_ID_DATA_SOURCE').val();
+        var P_ID_TIPO_LOG    = $('#P_ID_TIPO_LOG').val();
+        var P_ID_LOG         = 0;
+        var P_FECHA_INICIO   = GetFormattedDate($('#StartDate').val(), 0);
+        var P_FECHA_FIN      = GetFormattedDate($('#EndDate').val(), 0);
+        var P_ROW_NUM        = $("#txtRecordCount").val();
+        //
+        console.log("[SI-SPAE-WEB] - GETTING DATA. P_FECHA_INICIO :  " + P_FECHA_INICIO + " P_FECHA_FIN : " + P_FECHA_FIN);
+        //
+        _ShowProgressBarTimer();
+        //
+        GetDate();
+        //
+        $.ajax({
+            url        : "GetConsultaLogGet"
+            , method   : "GET"
+            , dataType : "JSON"
+            , data:
+            {
+                P_ID_DATA_SOURCE : P_ID_DATA_SOURCE
+                , P_ID_TIPO_LOG  : P_ID_TIPO_LOG
+                , P_ID_LOG       : P_ID_LOG
+                , P_FECHA_INICIO : P_FECHA_INICIO
+                , P_FECHA_FIN    : P_FECHA_FIN
+                , P_ROW_NUM      : P_ROW_NUM
+            }
+            , success: function (jsondata) {
+                //
+                DrawTable(jsondata);
+                //
+                _HideProgressBarTimer();
+            }
+            , error: function (xhr, textStatus, errorThrown) {
+                //
+                alert("Se presentó un fallo.<br/>Favor comunicarse con el administrador del sistema");
+                //
+                if (xhr != null) {
+                    //
+                    console.log(' [SI-SPAE-WEB] - REFRESHING DATA - return : ' + xhr.responseText);
+                }
+                //
+                _HideProgressBarTimer();
+            }
+        });
+    }
+    //
+    function GetConsultaLogExcelPostValidate() {
+        //
+        var form = $("#searchForm");
+        form.validate();
+        //
+        console.log("Valid: " + form.valid());
+        //
+        if (form.valid() == true) {
+            GetConsultaLogExcelPost();
+        }
+    }
+    //
+    function GetExcelHeaders() {
+        //
+        let excelHeaders = null;
+        var P_ID_TIPO_LOG = $('#P_ID_TIPO_LOG').val();
+        //
+        switch (P_ID_TIPO_LOG) {
+            case "1":  // EMAILS ENVIADOS
+                excelHeaders = JSON.parse("{\"ID_LOG\":\"Registro Nro.\",\"DATE_TIME\":\"Fecha/Hora\",\"TEXT_1\":\"Destinatario\",\"TEXT_2\":\"Asunto\"}");
+                break;
+            case "2":  // EMAILS NO ENVIADOS
+                excelHeaders = JSON.parse("{\"ID_LOG\":\"Registro Nro.\",\"DATE_TIME\":\"Fecha/Hora\",\"TEXT_1\":\"Usuario/Destinatario\",\"TEXT_2\":\"Descripción Error\"}");
+                break;
+            case "3":  // GENERAL DE ERRORES
+                excelHeaders = JSON.parse("{\"ID_LOG\":\"Registro Nro.\",\"DATE_TIME\":\"Fecha/Hora\",\"TEXT_1\":\"Usuario/Ubicación\",\"TEXT_2\":\"Descripción Error\"}");
+                break;
+
+        }
+        //
+        return JSON.stringify(excelHeaders);
+    }
+    //
+    function GetConsultaLogExcelPost() {
+        //
+        var P_ID_DATA_SOURCE      = $('#P_ID_DATA_SOURCE').val();
+        var P_FECHA_INICIO        = GetFormattedDate($('#StartDate').val(), 0);
+        var P_FECHA_FIN           = GetFormattedDate($('#EndDate').val(), 0);
+        var P_ID_TIPO_LOG         = $('#P_ID_TIPO_LOG').val();
+        var P_ID_LOG              = 0;
+        var P_ROW_NUM             = $("#txtRecordCount").val();
+        var P_ID_TIPO_LOG_TEXT    = $("#P_ID_TIPO_LOG option:selected").text().trim().split('-')[0];
+        var P_ID_DATA_SOURCE_TEXT = $('#P_ID_DATA_SOURCE option:selected').text().trim();
+        var P_FILE_NAME           = "[" + P_ID_DATA_SOURCE_TEXT + "]" + "[" + P_ID_TIPO_LOG_TEXT + "]";
+        var P_SHEET_NAME          = "{" + P_ID_TIPO_LOG_TEXT + "}";
+        var P_EXCEL_HEADERS       = GetExcelHeaders();
+        //
+        var url_post              = "GetConsultaLogExcelPost";
+        //
+        _ShowProgressBarTimer();
+        //
+        GetDate();
+        //
+        $.ajax(
+            {
+                data:
+                {
+                    P_ID_DATA_SOURCE  : P_ID_DATA_SOURCE
+                    , P_ID_TIPO_LOG   : P_ID_TIPO_LOG
+                    , P_ID_LOG        : P_ID_LOG
+                    , P_FECHA_INICIO  : P_FECHA_INICIO
+                    , P_FECHA_FIN     : P_FECHA_FIN
+                    , P_ROW_NUM       : P_ROW_NUM
+                    , P_FILE_NAME     : P_FILE_NAME
+                    , P_EXCEL_HEADERS : P_EXCEL_HEADERS
+                    , P_SHEET_NAME    : P_SHEET_NAME
+                }
+                , method       : 'POST'
+                , dataType     : 'TEXT'
+                , url          : url_post
+                , success      : function (p_nombrearchivo) {
+                    //
+                    console.log("[SI-SPAE-WEB] LOG DE ENVÍO DE EMAILS : GENERAR ARCHIVO EXCEL : " + p_nombrearchivo);
+                    //
+                    var url_get = "GetConsultaLogExcelFile?p_nombreArchivo=" + p_nombrearchivo;
+                    window.open(url_get, '_blank');
+                    //
+                    _HideProgressBarTimer();
+                }
+                , error: function (xhr, textStatus, errorThrown) {
+                    //
+                    alert("Se presentó un fallo.<br/>Favor comunicarse con el administrador del sistema");
+                    //
+                    if (xhr != null) {
+                        console.log(xhr.responseText);
+                    }
+                    //
+                    _HideProgressBarTimer();
+                }
+            });
+    }
+    //
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            //
+            return true;
+        }
+    );
+    //
+    function _ShowProgressBar() {
+        //
+        var modal           = document.getElementById("statusWindow");
+        modal.style.display = "block";
+        //
+        console.log('status window show');
+    }
+    //
+    function _HideProgressBar() {
+        //
+        var modal           = document.getElementById("statusWindow");
+        modal.style.display = "none";
+        modal.style.display = "hidden";
+        //
+        console.log('status window hide');
+    }
+    //
+    function _ShowProgressBarTimer() {
+        //
+        var modal           = document.getElementById('_statusWindowTimer');
+        modal.style.display = "block";
+        //
+        console.log('Show Progress Bar.');
+    }
+    //
+    function _HideProgressBarTimer() {
+        //
+        var modal            = document.getElementById('_statusWindowTimer');
+        modal.style.display  = "none";
+        //
+        console.log('Hide Progress Bar.');
+    }
+    //
+    $(document).ready(function () {
+        //
+        console.log("[SI-SPAE-WEB] - LOG DE ENVÍO DE EMAILS ");
+        //
+        $("#divdescargaexcel").hide();
+        $("#divTipoConsulta").hide();
+        $("#P_ID_TIPO_LOG").val("0");
+        $("#P_ID_DATA_SOURCE").val("0");
+        //
+        SetYearList_STAT();
+        //
+        $("#P_ID_DATA_SOURCE").on('change', function () {
+            //
+            console.log($('#P_ID_DATA_SOURCE').val());
+            //
+            if (Number($('#P_ID_DATA_SOURCE').val()) > 0) {
+                //
+                $("#divTipoConsulta").show();
+                $("#divdescargaexcel").show();
+                //
+                GetDateRange();
+            }
+            else {
+                //
+                $("#divTipoConsulta").hide();
+                $("#divdescargaexcel").hide();
+                $("#P_ID_TIPO_LOG").val("0");
+            }
+        });
+        //
+        $("#btnBuscar").click(function () {
+            //
+            var form = $("#searchForm");
+            form.validate();
+            //
+            console.log("Valid: " + form.valid());
+            //
+            if (form.valid() == true) {
+                //
+                GetConsultaLog();
+            }
+        });
+        //
+        jQuery.validator.addMethod("greaterThan",
+            function (value, element, params) {
+                //
+                console.log("[SI-SPAE-WEB] - LOG DE ENVÍO DE EMAILS - COMPARANDO " + (new Date(value) > new Date($(params).val())));
+                //
+                if (!/Invalid|NaN/.test(new Date(value))) {
+                    return new Date(value) > new Date($(params).val());
+                }
+                //
+                return isNaN(value) && isNaN($(params).val())
+                    || (Number(value) > Number($(params).val()));
+            }, ' Favor revise rango de fechas ');
+        //
+        jQuery.validator.addMethod("validRecordCount",
+            function (value, element, params) {
+                //
+                console.log("[SI-SPAE-WEB] - LOG DE ENVÍO DE EMAILS - VALIDANDO # REGISTROS : " + value);
+                //
+                if (!/Invalid|NaN/.test(value)) {
+                    return ((value > 2) && (value <= Number(params)));
+                }
+                //
+                return isNaN(value)
+                    || ((Number(value) > 2) && (Number(value) <= Number(params.val)));
+            }, ' # registros debe ser entre 3 y 9999');
+        //
+        jQuery.validator.addMethod("validTipoLog",
+            function (value, element, params) {
+                //
+                if (!/Invalid|NaN/.test(value)) {
+                    return (Number(value) > Number(params));
+                }
+                //
+                return isNaN(value)
+                    || (Number(value) > Number(params));
+            }, 'Favor ingrese un tipo de consulta');
+        //
+        jQuery.validator.addMethod("validDataSource",
+            function (value, element, params) {
+                //
+                if (!/Invalid|NaN/.test(value)) {
+                    return (Number(value) > Number(params));
+                }
+                //
+                return isNaN(value)
+                    || (Number(value) > Number(params));
+            }, 'Favor ingrese un origen de datos');
+        //
+        $("#searchForm").validate({
+            errorPlacement: function (error, element) {
+                $("#errorList").empty().append(error);
+            }
+            , rules: {
+                P_ID_DATA_SOURCE    : { required: true, validDataSource: "0"      }
+                , P_ID_TIPO_LOG     : { required: true, validTipoLog   : "0"      }
+                , StartDate         : "required"
+                , EndDate           : { required: true, greaterThan: "#StartDate" }
+                , txtRecordCount    : {
+                    required: true
+                    , number: true
+                    , validRecordCount: "9999"
+                }
+            }
+            , messages: {
+                P_ID_DATA_SOURCE :  { required: "Favor ingrese un origen de datos" }
+                , P_ID_TIPO_LOG  :  { required: "Favor ingrese un tipo de Log"     }
+                , StartDate      :  { required: "Favor ingrese fecha inicial"      }
+                , EndDate        :  { required: "Favor ingrese fecha final"        }
+                , txtRecordCount :  {
+                    required: "Favor ingrese # de registros"
+                    , number: "Favor ingrese solo números"
+                }
+            }
+        });
+        //
+        $(document).tooltip({
+            classes: {
+                "ui-tooltip": "highlight"
+            }
+        });
+        //
+        $(function () {
+            $("#tabContent").tabs();
+        });
+        //
+        jQuery.validator.addMethod("validRecordCount_STAT",
+            function (value, element, params) {
+                //
+                console.log("[SI-SPAE-WEB] - CONSULTA LOG - VALIDANDO # REGISTROS : " + value);
+                //
+                if (!/Invalid|NaN/.test(value)) {
+                    return ((value > 2) && (value <= Number(params)));
+                }
+                //
+                return isNaN(value)
+                    || ((Number(value) > 2) && (Number(value) <= Number(params.val)));
+            }, ' # registros debe ser entre 1 y 10');
+        //
+        jQuery.validator.addMethod("validYear_STAT",
+            function (value, element, params) {
+                //
+                if (!/Invalid|NaN/.test(value)) {
+                    return (Number(value) > Number(params));
+                }
+                //
+                return isNaN(value)
+                    || (Number(value) > Number(params));
+            }, 'Favor ingrese un año');
+        //
+        jQuery.validator.addMethod("validDataSource_STAT",
+            function (value, element, params) {
+                //
+                if (!/Invalid|NaN/.test(value)) {
+                    return (Number(value) > Number(params));
+                }
+                //
+                return isNaN(value)
+                    || (Number(value) > Number(params));
+            }, 'Favor ingrese un origen de datos');
+        //
+        $("#searchForm_STAT").validate({
+            errorPlacement         : function (error, element) {
+                $("#errorList_STAT").empty().append(error);
+            }
+            , rules: {
+                  P_ID_DATA_SOURCE_STAT      : { required: true, validDataSource_STAT: "0" }
+                , P_YEAR_STAT                : { required: true, validYear_STAT      : "0" }
+                , txtRecordCount_STAT        : {
+                    required                 : true
+                    , number                 : true
+                    , validRecordCount_STAT  : "10"
+                }
+            }
+            , messages: {
+                  P_ID_DATA_SOURCE_STAT  : { required: "Favor ingrese un origen de datos" }
+                , P_YEAR_STAT            : { required: "Favor ingrese un año"     }
+                , txtRecordCount_STAT    : {
+                    required: "Favor ingrese # de registros"
+                    , number: "Favor ingrese solo números"
+                }
+            }
+        });
+        //
+        $("#btnBuscar_STAT").click(function () {
+            //
+            var form = $("#searchForm_STAT");
+            form.validate();
+            //
+            console.log("Valid: " + form.valid());
+            //
+            if (form.valid() == true) {
+                //
+                SetChart();
+            }
+        });
+    });
+</script>
+<!-- FIN SCRIPTS -->
