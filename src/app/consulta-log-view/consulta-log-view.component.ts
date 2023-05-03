@@ -19,6 +19,10 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
   //
   informeLogRemoto!                  : Observable<LogEntry[]>;
   //
+  excelFileName!                     : Observable<string>;
+  //
+  _textStatus                        : string = "";
+  //
   dataSource                         = new MatTableDataSource<LogEntry>();
   // 
   displayedColumns                   : string[] = ['id_Column', 'pageName', 'accessDate', 'ipValue'];
@@ -123,7 +127,7 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
     this.informeLogRemoto.subscribe(myObserver);
   }
   //
-  GetConsultaLogExcelPostValidate():void{
+  GenerarInformeXLSValidate():void{
     //
     console.log("GENERAR EXCEL - VALIDAR");
     //
@@ -133,72 +137,131 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
     //console.log("Valid: " + form.valid());
     //
     //if (form.valid() == true) {
-        this.GetConsultaLogExcelPost();
+        this.GenerarInformeXLSPost();
     //}
   };
   //
-  GetConsultaLogExcelPost():void
-  {
+  GenerarInformeXLSPost():void  {
     //
     console.log("GENERAR EXCEL - POST");
+    //
+    this.excelFileName = this.logInfoService.getInformeExcel();
+    //
+    const xlsObserver = {
+      next: (_excelFileName: string)     => { 
+        //
+        console.log('Observer got a next value: ' + _excelFileName);
+        //
+        var urlFile      = 'https://mcsd.somee.com/xlsx/' + _excelFileName;
+        this._textStatus = this.DebugHostingContent(urlFile);
+        //
+      },
+      error   : (err: Error)  => {
+        //
+        console.error('Observer got an error: ' + err.cause);
+        //
+        console.error('Observer got an error: ' + err.message);
+      },
+      complete: () => console.log('Observer got a complete notification'),
+    };
+    //
+    this.excelFileName.subscribe(xlsObserver);
     /*
-    //
-    var P_ID_DATA_SOURCE      = $('#P_ID_DATA_SOURCE').val();
-    var P_FECHA_INICIO        = GetFormattedDate($('#StartDate').val(), 0);
-    var P_FECHA_FIN           = GetFormattedDate($('#EndDate').val(), 0);
-    var P_ID_TIPO_LOG         = $('#P_ID_TIPO_LOG').val();
-    var P_ID_LOG              = 0;
-    var P_ROW_NUM             = $("#txtRecordCount").val();
-    var P_ID_TIPO_LOG_TEXT    = $("#P_ID_TIPO_LOG option:selected").text().trim().split('-')[0];
-    var P_ID_DATA_SOURCE_TEXT = $('#P_ID_DATA_SOURCE option:selected').text().trim();
-    var P_FILE_NAME           = "[" + P_ID_DATA_SOURCE_TEXT + "]" + "[" + P_ID_TIPO_LOG_TEXT + "]";
-    var P_SHEET_NAME          = "{" + P_ID_TIPO_LOG_TEXT + "}";
-    var P_EXCEL_HEADERS       = GetExcelHeaders();
-    //
-    var url_post              = "GetConsultaLogExcelPost";
-    //
-    //_ShowProgressBarTimer();
-    //
-    //GetDate();
-    //
-    $.ajax(
-        {
-            data:
+        //
+    $("#btnGenerarInforme").click(function () {
+        //
+        _ShowProgressBar();
+        //
+        console.log("GENERANDO INFORME XLS");
+        //
+        var p_url = "GenerarInformeXLS";
+        //
+        $.ajax({
+            url: p_url
+        })
+        .done(function (data) {
+            //
+            console.log("RESULTADO FUNCION : " + data);
+            //
+            if (data === "[ERROR]") 
             {
-                P_ID_DATA_SOURCE  : P_ID_DATA_SOURCE
-                , P_ID_TIPO_LOG   : P_ID_TIPO_LOG
-                , P_ID_LOG        : P_ID_LOG
-                , P_FECHA_INICIO  : P_FECHA_INICIO
-                , P_FECHA_FIN     : P_FECHA_FIN
-                , P_ROW_NUM       : P_ROW_NUM
-                , P_FILE_NAME     : P_FILE_NAME
-                , P_EXCEL_HEADERS : P_EXCEL_HEADERS
-                , P_SHEET_NAME    : P_SHEET_NAME
+                //
+                alert("ERROR EN FUNCION");
             }
-            , method       : 'POST'
-            , dataType     : 'TEXT'
-            , url          : url_post
-            , success      : function (p_nombrearchivo) {
+            else
+            {
                 //
-                console.log("[SI-SPAE-WEB] LOG DE ENVÍO DE EMAILS : GENERAR ARCHIVO EXCEL : " + p_nombrearchivo);
+                //var urlFile      = '../Output/xlsx/' + data;
+                var urlFile      = '../xlsx/' + data;
+                var downloadLink = DebugHostingContent("javascript:void window.open('" + urlFile + "');");
                 //
-                var url_get = "GetConsultaLogExcelFile?p_nombreArchivo=" + p_nombrearchivo;
-                window.open(url_get, '_blank');
+                $("#DownloadFile").attr("href", downloadLink );
                 //
-                _HideProgressBarTimer();
+                alert("SE GENERO CORRECTAMENTE EL ARCHIVO");
             }
-            , error: function (xhr, textStatus, errorThrown) {
-                //
-                alert("Se presentó un fallo.<br/>Favor comunicarse con el administrador del sistema");
-                //
-                if (xhr != null) {
-                    console.log(xhr.responseText);
-                }
-                //
-                _HideProgressBarTimer();
-            }
+            //
+            _HideProgressBar();
+            //
+            return true;
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            //
+            _HideProgressBar();
+            //
+            console.log('ERROR EN FUNCION : ' + textStatus);
+            //
+            console.log('ERROR EN FUNCION : ' + errorThrown);
+            //
+            alert("ERROR EN FUNCION");
+            //
+            return false;
         });
-      });
-      */
+    });
+    */
   }
+  //
+  DebugHostingContent(msg : string) : string {
+    //
+    console.log("cadena a evaular : " + msg);
+    //
+    let regEx = /(.*)(<!--SCRIPT GENERATED BY SERVER! PLEASE REMOVE-->)(.*\w+.*)(<!--SCRIPT GENERATED BY SERVER! PLEASE REMOVE-->)(.*)/;
+    //
+    var strMsg = msg.replace(/(\r\n|\n|\r)/gm, "");
+    //
+    var matches = strMsg.match(regEx);
+    //
+    if (matches != null) {
+        //
+        for (var index = 1; index < matches.length; index++) {
+            //
+            var matchValue = matches[index];
+            //        
+            console.log("coincidencia : " + matchValue);
+
+            //
+            if ((matchValue.indexOf("<!--SCRIPT GENERATED BY SERVER! PLEASE REMOVE-->") != -1) && (matchValue.trim() != "")) {
+                //
+                strMsg = strMsg.replace(matchValue, "");
+                //
+                console.log("REEMPLAZANDO. NUEVA CADENA : " + strMsg);
+            }
+
+            //
+            if ((matchValue.indexOf("<center>") != -1) && (matchValue.trim() != "")) {
+                //
+                strMsg = strMsg.replace(matchValue, "");
+                //
+                console.log("REEMPLAZANDO. NUEVA CADENA : " + strMsg);
+            }
+        }
+      }
+      else
+          console.log("NO_HAY_COINCIDENCIAS");
+      //
+      console.log("CADENA DEPURADA : " + strMsg);
+      //
+      strMsg = strMsg.replace("unsafe:", "");
+      //
+      return strMsg;
+  };
 }
