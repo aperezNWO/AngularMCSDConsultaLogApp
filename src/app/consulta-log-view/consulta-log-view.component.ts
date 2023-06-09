@@ -165,58 +165,6 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
     };
     //
     this.excelFileName.subscribe(xlsObserver);
-    /*
-        //
-    $("#btnGenerarInforme").click(function () {
-        //
-        _ShowProgressBar();
-        //
-        console.log("GENERANDO INFORME XLS");
-        //
-        var p_url = "GenerarInformeXLS";
-        //
-        $.ajax({
-            url: p_url
-        })
-        .done(function (data) {
-            //
-            console.log("RESULTADO FUNCION : " + data);
-            //
-            if (data === "[ERROR]") 
-            {
-                //
-                alert("ERROR EN FUNCION");
-            }
-            else
-            {
-                //
-                //var urlFile      = '../Output/xlsx/' + data;
-                var urlFile      = '../xlsx/' + data;
-                var downloadLink = DebugHostingContent("javascript:void window.open('" + urlFile + "');");
-                //
-                $("#DownloadFile").attr("href", downloadLink );
-                //
-                alert("SE GENERO CORRECTAMENTE EL ARCHIVO");
-            }
-            //
-            _HideProgressBar();
-            //
-            return true;
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            //
-            _HideProgressBar();
-            //
-            console.log('ERROR EN FUNCION : ' + textStatus);
-            //
-            console.log('ERROR EN FUNCION : ' + errorThrown);
-            //
-            alert("ERROR EN FUNCION");
-            //
-            return false;
-        });
-    });
-    */
   }
   //
   DebugHostingContent(msg : string) : string {
