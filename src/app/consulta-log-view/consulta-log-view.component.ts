@@ -85,7 +85,6 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
   //
   onSubmit() 
   {
-    //
        //
        console.warn("(SUBMIT 1)");
        //
