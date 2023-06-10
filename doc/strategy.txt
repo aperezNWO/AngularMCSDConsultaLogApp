@@ -1,9 +1,9 @@
 ================================================
--- [LEARNINGPATH - CONSULTA LOG] - STRATEGY
+-- [CONSULTA LOG] - STRATEGY
 ================================================
---[_] JSON METHOD.
-      -- [_] LEARNINGPATH APP : http://angulardemo.somee.com/demos/generarinformejson
-      -- [_] ESTRUCTURA:
+--[x] JSON METHOD.
+      -- [x] LEARNINGPATH APP : http://angulardemo.somee.com/demos/generarinformejson
+      -- [x] ESTRUCTURA:
                   [{"id_Column":100331
                     ,"pageName":"PAGE_INDEX"
                     ,"accessDate":"2023-02-13T18:13:19.9"
@@ -68,4 +68,20 @@ function GetConsultaLogExcelPost() {
                 _HideProgressBarTimer();
             }
         });
-}                    
+}    
+
+================================================
+-- [algoritmos - redes neuronales] - STRATEGY
+================================================
+
+-- [_] backend   : .net core.
+
+        -- [_] accordion library for .net.
+
+        -- [_] http://accord-framework.net/
+
+-- [_] frontend  :  angular.
+
+        -- [_] publish mcsd demo.
+
+================================================
