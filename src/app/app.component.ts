@@ -10,6 +10,6 @@ export class AppComponent {
   //
   title             : string = '[MCSD - CONSULTA LOG]';
   appName           : string = "[MCSD - CONSULTA LOG]";
-  appVersion        : string = '1.0.0.8';
+  appVersion        : string = '1.0.0.9';
   runtimeVersion    : string = VERSION.full;
  }   

@@ -29,6 +29,10 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
   //
   td_ExcelDownloadLink               : string  = "";
   //
+  td_buttonCaption_xls               : string  = "";
+  //
+  td_textStatus_xls                  : string  = "";
+  //
   dataSource                         = new MatTableDataSource<LogEntry>();
   // 
   displayedColumns                   : string[] = ['id_Column', 'pageName', 'accessDate', 'ipValue'];
@@ -93,6 +97,12 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
       this.td_formSubmit        = false;
       //
       this.td_textStatus        = "";
+      //
+      this.td_buttonCaption_xls               = "[Generar Excel]";
+      //
+      this.td_textStatus_xls                  = "";
+      //
+      this.td_ExcelDownloadLink               = "#";
   }
   //
   onSubmit() 
@@ -128,6 +138,7 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
     this.informeLogRemoto     = this.logInfoService.getLogRemoto();
     //
     const logSearchObserver   = {
+      //
       next: (p_logEntry: LogEntry[])     => { 
         //
         console.log('Observer got a next value: ' + JSON.stringify(p_logEntry));
@@ -182,27 +193,40 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
     //
     console.log("GENERAR EXCEL - POST");
     //
+    this.td_ExcelDownloadLink               = "#";
+    //
+    this.td_buttonCaption_xls               = "[Generando por favor espere...]";
+    //
+    this.td_textStatus_xls                  = "[Generando por favor espere...]";
+    //
     this.excelFileName = this.logInfoService.getInformeExcel();
     //
     const xlsObserver = {
-      next: (_excelFileName: string)     => { 
+      //
+      next: (_excelFileName: string) => { 
         //
         console.log('Observer got a next value: ' + _excelFileName);
         //
         let urlFile               = 'https://mcsd.somee.com/xlsx/' + _excelFileName;
         this.td_ExcelDownloadLink = this. DebugHostingContent(urlFile);
         //
+        this.td_textStatus_xls     = "[Descargar Excel]";
       },
       error   : (err: Error)  => {
         //
         console.error('Observer got an error: ' + err.cause);
         //
         console.error('Observer got an error: ' + err.message);
+        //
+        this.td_buttonCaption_xls  = "[Ha ocurrido un error]";
+        //
+        this.td_textStatus_xls     = "[Ha ocurrido un error]";
       },
       complete: () => {
         //
         console.log('Observer got a complete notification')
         //
+        this.td_buttonCaption_xls  = "[Generar Excel]";
       },
     };
     //
