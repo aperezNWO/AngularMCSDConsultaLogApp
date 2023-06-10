@@ -152,7 +152,7 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
         console.log('Observer got a next value: ' + _excelFileName);
         //
         var urlFile      = 'https://mcsd.somee.com/xlsx/' + _excelFileName;
-        this._textStatus = this.DebugHostingContent(urlFile);
+        this._textStatus = this. DebugHostingContent(urlFile);
         //
       },
       error   : (err: Error)  => {
