@@ -4,7 +4,7 @@
   <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
     <!--P_DATA_SOURCE_ID      -->
     <div>
-      <label for="_P_DATA_SOURCE_ID">Origen de Datos :</label>
+      <!--<label for="_P_DATA_SOURCE_ID">Origen de Datos :</label>-->
       <!--<select   id="_P_DATA_SOURCE_ID"
                 required
                 name="_P_DATA_SOURCE_ID" formControlName="_P_DATA_SOURCE_ID">                    
@@ -13,7 +13,7 @@
     </div>
     <!-- [_] P_ID_TIPO_LOG    -->
     <div>
-      <label for="_P_ID_TIPO_LOG">Tipo de Consulta : </label>
+      <!--<label for="_P_ID_TIPO_LOG">Tipo de Consulta : </label>-->
       <!--<select id="_P_ID_TIPO_LOG"
               required
               name="_P_ID_TIPO_LOG" formControlName="_P_ID_TIPO_LOG">                    
@@ -41,23 +41,33 @@
       </label>
       <input id="_P_FECHA_FIN" type="date" formControlName="_P_FECHA_FIN">
     </div>
+    <!-- INICIO BUTTONS PANEL        -->
     <hr>
     <div align="right">
-      <button class="button" type="submit">Buscar</button>
-      <button class="button" type="button" (click)="newSearch()">Nueva</button>
+      <button class="button" type="submit" [disabled]="(this.td_buttonCaption != '[Buscar]')">{{this.td_buttonCaption}}</button>
+      <button class="button" type="button" (click)="this.newSearch()">[Nueva]</button>
     </div>
+    <!-- FIN BUTTONS PANEL           -->
+    <!-- INICIO STATUS BUSQUEDA      -->
+    <hr>
+    <div align="center">
+      <span id="status" name="searchStatus" class="searchStatus" id="searchStatus">{{this.td_textStatus}}</span>
+    </div>
+    <!-- FIN    STATUS BUSQUEDA      -->
+    <!-- INICIO DESCARGA EXCEL       -->
     <hr>
     <div id="divdescargaexcel" style="display: block;" align="right">
       <br>
       <button class="button" type="button" (click)="GenerarInformeXLSValidate()">[Generar Excel]</button>
       <br>
       <br>
-      <a [href]="this._textStatus" id="DownloadFile">[Descargar Informe XLS]</a>
+      <a [href]="this.td_ExcelDownloadLink" id="DownloadFile">[Descargar Informe XLS]</a>
     </div>
+    <!-- FIN DESCARGA EXCEL          -->
+    <hr>  
   </form>
 </div>
 <hr>  
-<div class="scrollbar">
 <table  mat-table  [dataSource]="dataSource"  class="mat-elevation-z8" aria-label="informelogremoto">
   <ng-container matColumnDef="id_Column">
     <th mat-header-cell *matHeaderCellDef>id_Column</th>
@@ -78,7 +88,6 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </table>
-</div>
 <hr>
 <mat-paginator #paginator="matPaginator"
     class="demo-paginator" 

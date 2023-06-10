@@ -21,7 +21,13 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
   //
   excelFileName!                     : Observable<string>;
   //
-  _textStatus                        : string = "";
+  td_textStatus                      : string = "";
+  //
+  td_buttonCaption                   : string = "[Buscar]";
+  //
+  td_formSubmit                      : boolean = false;
+  //
+  td_ExcelDownloadLink               : string  = "";
   //
   dataSource                         = new MatTableDataSource<LogEntry>();
   // 
@@ -81,6 +87,12 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
       console.log("P_FECHA_INICIO    : " + (this.searchForm.value["_P_FECHA_INICIO"]   || ""));      
       console.log("P_FECHA_FIN       : " + (this.searchForm.value["_P_FECHA_FIN"]      || "")); 
       console.log("(DEFAULT VALUES - END)");
+      //
+      this.td_buttonCaption     = "[Buscar]";
+      //
+      this.td_formSubmit        = false;
+      //
+      this.td_textStatus        = "";
   }
   //
   onSubmit() 
@@ -109,21 +121,47 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
   //
   update(_searchCriteria : SearchCriteria):void {
     //
-    this.informeLogRemoto = this.logInfoService.getLogRemoto();
+    this.td_buttonCaption     = "[Buscando por favor espere]";
     //
-    const myObserver = {
+    this.td_formSubmit        = true;
+    //
+    this.informeLogRemoto     = this.logInfoService.getLogRemoto();
+    //
+    const logSearchObserver   = {
       next: (p_logEntry: LogEntry[])     => { 
         //
         console.log('Observer got a next value: ' + JSON.stringify(p_logEntry));
         //
+        let recordCount : number  = p_logEntry.length;
+        //
+        this.td_textStatus        = "Se encontraton [" + recordCount  + "] registros";
+        //
         this.dataSource           = new MatTableDataSource<LogEntry>(p_logEntry);
         this.dataSource.paginator = this.paginator;
+        //
+        // los botones se configuran en el evento "complete()".
       },
-      error: (err: Error)       => console.error('Observer got an error: ' + err),
-      complete: () => console.log('Observer got a complete notification'),
+      error: (err: Error) => {
+        //
+        console.error('Observer got an error: ' + err);
+        //
+        this.td_textStatus        = "Ha ocurrido un error";
+        //
+        this.td_buttonCaption     = "[Buscar]";
+        //
+        this.td_formSubmit        = false;
+      },       
+      complete: ()        => {
+        //
+        console.log('Observer got a complete notification');
+        //
+        this.td_buttonCaption     = "[Buscar]";
+        //
+        this.td_formSubmit        = false;
+      },
     };
     //
-    this.informeLogRemoto.subscribe(myObserver);
+    this.informeLogRemoto.subscribe(logSearchObserver);
   }
   //
   GenerarInformeXLSValidate():void{
@@ -151,8 +189,8 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
         //
         console.log('Observer got a next value: ' + _excelFileName);
         //
-        var urlFile      = 'https://mcsd.somee.com/xlsx/' + _excelFileName;
-        this._textStatus = this. DebugHostingContent(urlFile);
+        let urlFile               = 'https://mcsd.somee.com/xlsx/' + _excelFileName;
+        this.td_ExcelDownloadLink = this. DebugHostingContent(urlFile);
         //
       },
       error   : (err: Error)  => {
@@ -161,7 +199,11 @@ export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
         //
         console.error('Observer got an error: ' + err.message);
       },
-      complete: () => console.log('Observer got a complete notification'),
+      complete: () => {
+        //
+        console.log('Observer got a complete notification')
+        //
+      },
     };
     //
     this.excelFileName.subscribe(xlsObserver);
