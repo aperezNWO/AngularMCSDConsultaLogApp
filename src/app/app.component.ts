@@ -12,7 +12,7 @@ export class AppComponent {
   //
   title             : string = '[MCSD - CONSULTAS]';
   appName           : string = "[MCSD - CONSULTAS]";
-  appVersion        : string = '1.0.0.11';
+  appVersion        : string = '1.0.0.12';
   runtimeVersion    : string = VERSION.full;
   //
   readonly LogInfoViewComponent_pageTitle             : string = ConsultaLogViewComponent.pageTitle();
