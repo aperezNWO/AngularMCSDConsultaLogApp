@@ -15,7 +15,11 @@ import { LogInfoService                                } from '../log-info.servi
 //
 export class ConsultaLogViewComponent implements OnInit, AfterViewInit {
   //
-  pageTitle                          = '[Material Table with json/http remote source and pagination]';
+  pageTitle            : string = '[CONSULTA LOG]';
+  //
+  static pageTitle()   : string {
+    return '[CONSULTA LOG]';
+  }
   //
   informeLogRemoto!                  : Observable<LogEntry[]>;
   //

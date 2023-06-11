@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./consulta-dinero-view.component.css']
 })
 export class ConsultaDineroViewComponent {
-
+  //
+  pageTitle            : string = '[ALGORITMO DIJKSTRA]';
+  //
+  static pageTitle()   : string {
+    return '[ALGORITMO DIJKSTRA]';
+  }
 }

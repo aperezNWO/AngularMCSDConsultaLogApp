@@ -3,7 +3,16 @@
     <h2>{{title}}</h2>
 </div>
 <hr/>
-<app-consulta-log-view></app-consulta-log-view>
+<div class="navigation">
+    <nav>
+            <a routerLink="/">Home</a>
+            |   
+            <a routerLink="/ConsultaLogViewComponent">{{LogInfoViewComponent_pageTitle}}</a>
+            | 
+            <a routerLink="/ConsultaDineroViewComponent">{{ConsultaDineroViewComponent_pageTitle}}</a>
+    </nav>
+    <router-outlet></router-outlet>
+</div>
 <router-outlet></router-outlet>
 <hr/>
 <div class="footer">

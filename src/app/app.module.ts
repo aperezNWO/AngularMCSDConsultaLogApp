@@ -27,12 +27,10 @@ import { ConsultaDineroViewComponent               } from './consulta-dinero-vie
     MatListModule,
     MatTableModule,
     MatPaginatorModule,
-    /*
     RouterModule.forRoot([
-      {  path: 'lista'          , component: ListaComponent           },
-      {  path: 'datatable'      , component: DatatableComponent       },
-      {  path: 'dynamictable'   , component: LogInfoViewComponent     }, 
-    ])¨*/
+      {  path: 'ConsultaLogViewComponent'         , component: ConsultaLogViewComponent           },
+      {  path: 'ConsultaDineroViewComponent'      , component: ConsultaDineroViewComponent        },
+    ])
   ],
   providers: [],
   bootstrap: [AppComponent]
