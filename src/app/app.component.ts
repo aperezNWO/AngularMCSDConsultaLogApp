@@ -10,8 +10,8 @@ import { ConsultaDineroViewComponent               } from './consulta-dinero-vie
 //
 export class AppComponent {
   //
-  title             : string = '[MCSD - CONSULTAS]';
-  appName           : string = "[MCSD - CONSULTAS]";
+  title             : string = '[MCSD - CONSULTA LOG]';
+  appName           : string = "[MCSD - CONSULTA LOG]";
   appVersion        : string = '1.0.0.12';
   runtimeVersion    : string = VERSION.full;
   //
